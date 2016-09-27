@@ -2,14 +2,11 @@ package com.ringfulhealth.chatbotbook.facebook;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class EchoBasicServlet extends HttpServlet {
 
@@ -35,7 +33,7 @@ public class EchoBasicServlet extends HttpServlet {
             return;
         }
 
-        String page_access_token = "FB-PAGE-TOKEN";
+        String page_access_token = "EAAaCVHLqFzoBAEpCQQe4ZAOORZApsElw6mwsZCov9TGZBzs9OqZABWzqTkgtpOjepR5qZAEsOYJ2uZA1OuW8bddZCZBSuZCZAsMb1gam2ZCoHaua2m8Py1Sqph7DYv8e9t8l3KDi0Ok5jRQXsZB3615mb0oDqUASDmYMF0r1XsPeubUrcraB8tQZAcm5Eg";
 
         // Read POST body from request
         StringBuilder buffer = new StringBuilder();
@@ -62,7 +60,7 @@ public class EchoBasicServlet extends HttpServlet {
                     JSONObject r = new JSONObject();
                     r.put("recipient", (new JSONObject()).put("id", sender_id));
                     r.put("message", (new JSONObject()).put("text", message));
-                    System.out.println(r.toString());
+                    System.out.println("4" + r.toString());
 
                     CloseableHttpClient httpclient = HttpClients.createDefault();
                     CloseableHttpResponse response = null;
@@ -70,6 +68,7 @@ public class EchoBasicServlet extends HttpServlet {
                         HttpPost httpPost = new HttpPost("https://graph.facebook.com/v2.6/me/messages?access_token=" + page_access_token);
                         httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
                         httpPost.setEntity(new StringEntity(r.toString(), StandardCharsets.UTF_8));
+                        System.out.println("I'm posting " + Arrays.toString(httpPost.getAllHeaders()));
                         response = httpclient.execute(httpPost);
 
                         HttpEntity entity = response.getEntity();

@@ -1,36 +1,28 @@
 package com.ringfulhealth.chatbotbook.facebook;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
-import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -71,7 +63,7 @@ public abstract class BaseServlet extends HttpServlet {
             buffer.append(line);
         }
         String body = buffer.toString();
-        System.out.println(body);
+        System.out.println("body: '" + body + "'");
 
         // HTTP connection closes here. But the servlet continues to run.
         resp.getOutputStream().close();
@@ -96,6 +88,7 @@ public abstract class BaseServlet extends HttpServlet {
                     String message = null;
                     if (messaging.has("message")) {
                         JSONObject msg_obj = messaging.getJSONObject("message");
+                        System.out.println("msg_obj = " + msg_obj);
                         try {
                             if (msg_obj.has("quick_reply")) {
                                 message = msg_obj.getJSONObject("quick_reply").getString("payload");
@@ -104,6 +97,8 @@ public abstract class BaseServlet extends HttpServlet {
                             }
                         } catch (Exception e) {
                             // message remains null.
+                            System.out.println("message remains null");
+                            e.printStackTrace();
                         }
 
                         if (message == null) {
@@ -135,6 +130,7 @@ public abstract class BaseServlet extends HttpServlet {
                                     return;
 
                                 } else {
+                                    System.out.println("sorry");
                                     sendReply("Sorry, I cannot understand you. Please reply with text.", sender_id);
                                     return;
                                 }
@@ -146,15 +142,18 @@ public abstract class BaseServlet extends HttpServlet {
                             }
                         }
                     } else if (messaging.has("postback")) {
+                        System.out.println("postback");
                         message = messaging.getJSONObject("postback").getString("payload");
                     } else {
                         // Ignore all other events such as message READ events etc.
                         // sendReply("Sorry, I cannot understand you.", sender_id);
+                        System.out.println("1");
                         return;
                     }
 
                     if (message == null || message.trim().isEmpty()) {
                         // No message. Return now.
+                        System.out.println(2);
                         return;
                     }
                     Object bot_says = converse(message.trim(), context);
@@ -170,6 +169,7 @@ public abstract class BaseServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
+            System.out.println(3);
             e.printStackTrace();
             throw new ServletException (e);
         }

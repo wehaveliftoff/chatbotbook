@@ -1,15 +1,12 @@
 package com.ringfulhealth.chatbotbook.facebook;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GreetServlet extends BaseServlet {
 
     public GreetServlet () {
-        page_access_token = "FB-PAGE-TOKEN";
+        page_access_token = "EAAaCVHLqFzoBAEpCQQe4ZAOORZApsElw6mwsZCov9TGZBzs9OqZABWzqTkgtpOjepR5qZAEsOYJ2uZA1OuW8bddZCZBSuZCZAsMb1gam2ZCoHaua2m8Py1Sqph7DYv8e9t8l3KDi0Ok5jRQXsZB3615mb0oDqUASDmYMF0r1XsPeubUrcraB8tQZAcm5Eg";
     }
 
     public Object converse (String human, ConcurrentHashMap<String, Object> context) {
